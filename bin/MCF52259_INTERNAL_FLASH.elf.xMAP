@@ -1,0 +1,213 @@
+
+
+#>00001000          ___heap_size (linker command file)
+#>00001000          ___stack_size (linker command file)
+#>40000000          ___IPSBAR (linker command file)
+#>20000000          ___RAMBAR (linker command file)
+#>0000FFFF          ___RAMBAR_SIZE (linker command file)
+#>00000000          ___FLASHBAR (linker command file)
+#>00080000          ___FLASHBAR_SIZE (linker command file)
+#>2000FFFB          ___SP_AFTER_RESET (linker command file)
+
+# .userram
+
+# .code
+
+# .vectorram
+
+# .vectors
+  00000000 00000400 .vectortable _vect	(exceptions.c)
+
+# .cfmprotect
+  00000400 00000018 .cfmconfig _cfm	(cfm.c)
+
+# .text
+  00000500 0000002C .text   uart0IntSetUp	(main.c)
+  0000052C 0000006C .text   uart0_handler	(main.c)
+  00000598 000000D6 .text   packhCoeff	(main.c)
+  0000066E 00000072 .text   hCoeffOutOfBound	(main.c)
+  000006E0 000000DC .text   bldhCoeffYCoord	(main.c)
+  000007BC 0000004C .text   bldx2	(main.c)
+  00000808 00000090 .text   formHCoeffXCoords	(main.c)
+  00000898 00000084 .text   bldY1s	(main.c)
+  0000091C 0000004C .text   bldY2	(main.c)
+  00000968 000001DC .text   bldXhyhHcoeffCmnd	(main.c)
+  00000B44 00000056 .text   bldXCoordRepl	(main.c)
+  00000B9A 00000066 .text   bldXhyhCmnd	(main.c)
+  00000C00 0000011E .text   bldXhyhCmndByteArry	(main.c)
+  00000D1E 0000011E .text   bldAdcXhyhCmndByteArry	(main.c)
+  00000E3C 000000E0 .text   bldXhyhCmndArry	(main.c)
+  00000F1C 00000076 .text   init_spi	(main.c)
+  00000F92 0000006C .text   start_spi_trans	(main.c)
+  00000FFE 00000054 .text   adcArryPtr	(main.c)
+  00001052 00000050 .text   bldAdcResBaseYCoord	(main.c)
+  000010A2 0000004C .text   bldLcdAdcBaseYCoord	(main.c)
+  000010EE 000000A6 .text   bldAdcResYCoord	(main.c)
+  00001194 000000A2 .text   bldAdcResYCoordForYFir	(main.c)
+  00001236 000000D8 .text   yFir	(main.c)
+  0000130E 00000162 .text   lcdSendXhyhCmnd	(main.c)
+  00001470 000001B0 .text   lcdSendXhyhCmnd2	(main.c)
+  00001620 000000F4 .text   lcdSndIndvXhyhCmnd	(main.c)
+  00001714 00000092 .text   lcdSendCmnd	(main.c)
+  000017A6 00000058 .text   sndRecvLcdQspiByte	(main.c)
+  000017FE 00000056 .text   sndRecvLcdQspiByte2	(main.c)
+  00001854 0000004A .text   sndRecvLcdQspiByte4	(main.c)
+  0000189E 00000076 .text   sndXhyhCmnd	(main.c)
+  00001914 00000052 .text   printString	(main.c)
+  00001966 00000080 .text   drawHcoeffBox	(main.c)
+  000019E6 00000092 .text   drawRawAdcBox	(main.c)
+  00001A78 0000006C .text   drawHcoeffHorzGrid	(main.c)
+  00001AE4 00000072 .text   setXhyh	(main.c)
+  00001B56 00000060 .text   clrhCoeffGrph	(main.c)
+  00001BB6 000000C0 .text   drwhCoeffGrph	(main.c)
+  00001C76 00000056 .text   redrwGrdLines	(main.c)
+  00001CCC 0000004C .text   drwBordAndGrids	(main.c)
+  00001D18 0000018E .text   drwYHcoeffsLegnd	(main.c)
+  00001EA6 0000015A .text   drwXHcoeffsLegnd	(main.c)
+  00002000 0000010C .text   drwAdcYLegnd	(main.c)
+  0000210C 00000054 .text   initScrn	(main.c)
+  00002160 0000056A .text   monitorScreen	(main.c)
+  000026CA 0000015C .text   main	(main.c)
+  00002826 00000062 .text   pll_init	(M52259DEMO_sysinit.c)
+  00002888 00000034 .text   allow_interrupts	(M52259DEMO_sysinit.c)
+  000028BC 00000142 .text   adc_init	(M52259DEMO_sysinit.c)
+  000029FE 0000005C .text   __initialize_hardware	(M52259DEMO_sysinit.c)
+  00002A5A 00000008 .text   __initialize_system	(startcf.c)
+  00002A62 00000022 .text   __copy_rom_section	(startcf.c)
+  00002A84 0000003C .text   __copy_rom_sections_to_ram	(startcf.c)
+  00002AC0 00000004 .text   _ExitProcess	(startcf.c)
+  00002AC4 00000070 .text   clear_mem	(startcf.c)
+  00002B34 000000AA .text   _startup	(startcf.c)
+  00002BDE 000000B4 .text   uart_init	(uart_support.c)
+  00002C92 00000028 .text   InitializeUART	(uart_support.c)
+  00002CBA 00000036 .text   WriteUARTN	(uart_support.c)
+  00002CF0 00000028 .text   derivative_interrupt	(exceptions.c)
+  00002D18 000001CC .text   mcf_exception_handler	(exceptions.c)
+  00002EE4 00000024 .text   asm_exception_handler	(exceptions.c)
+  00002F08 0000000C .text   mcf5xxx_wr_vbr	(exceptions.c)
+  00002F14 0000004A .text   initialize_exceptions	(exceptions.c)
+  00002F5E 0000001C .text   __call_static_initializers	(C_4i_CF_Runtime.a cf_staticinitia)
+  00002F7A 0000002A .text   __destroy_global_chain	(C_4i_CF_Runtime.a cf_staticinitia)
+  00002FA4 00000032 .text   exit	(C_4i_CF_SZ_MSL.a abort_exit_cf.o)
+  00002FD6 00000036 .text   __exit	(C_4i_CF_SZ_MSL.a abort_exit_cf.o)
+  0000300C 00000004 .text   fflush	(C_4i_CF_SZ_MSL.a embedded_tiny_i)
+  00003010 000003A0 .text   vprintf	(C_4i_CF_SZ_MSL.a printf.o       )
+  000033B0 0000001A .text   _out	(C_4i_CF_SZ_MSL.a printf.o       )
+  000033CA 00000018 .text   set_printf	(C_4i_CF_SZ_MSL.a printf.o       )
+  000033E2 0000002C .text   TERMIO_PutChar	(C_4i_CF_SZ_MSL.a printf.o       )
+  0000340E 00000020 .text   printf	(C_4i_CF_SZ_MSL.a printf.o       )
+  0000342E 00000026 .text   __init_uart_console	(C_4i_CF_SZ_MSL.a uart_console_io)
+  00003454 0000003A .text   __write_console	(C_4i_CF_SZ_MSL.a uart_console_io)
+  00003490 00000040 .rodata @2699	(main.c)
+  000034D0 00000028 .rodata pow10	(C_4i_CF_SZ_MSL.a printf.o       )
+#>000034F8          ___ROM_AT (linker command file)
+#>000034F8          ___DATA_ROM (linker command file)
+
+# .data
+#>20000400          ___DATA_RAM (linker command file)
+#>20000400          __exception_table_start__ (linker command file)
+# Exception index
+  20000400 00000000         Exception Table Index	()
+#>20000400          __exception_table_end__ (linker command file)
+#>20000400          ___sinit__ (linker command file)
+# Linker generated symbols
+  20000400 00000004         static initializer	(linker generated)
+#>20000404          __START_DATA (linker command file)
+  20000404 00000004 .data   setColBlk	(main.c)
+  20000408 00000004 .data   setColWht	(main.c)
+  2000040C 00000004 .data   setColRed	(main.c)
+  20000410 00000004 .data   setColBlue	(main.c)
+  20000414 00000005 .data   o15	(main.c)
+  20000419 00000005 .data   o1o	(main.c)
+  2000041E 00000005 .data   oo5	(main.c)
+  20000423 00000005 .data   ooo	(main.c)
+  20000428 00000006 .data   _oo5	(main.c)
+  2000042E 00000006 .data   _o1o	(main.c)
+  20000434 00000006 .data   _o15	(main.c)
+  2000043A 00000004 .data   three_three	(main.c)
+  2000043E 00000002 .data   zero	(main.c)
+  20000440 00000004 .data   one_o	(main.c)
+  20000444 00000004 .data   two_o	(main.c)
+  20000448 00000004 .data   three_o	(main.c)
+  2000044C 00000003 .data   twelve	(main.c)
+  2000044F 00000003 .data   twentyfour	(main.c)
+  20000452 00000003 .data   thirtysix	(main.c)
+  20000455 00000003 .data   fortyeight	(main.c)
+  20000458 00000003 .data   sixty	(main.c)
+#>2000045C          __END_DATA (linker command file)
+#>2000045C          __START_SDATA (linker command file)
+#>2000045C          __END_SDATA (linker command file)
+#>2000045C          ___DATA_END (linker command file)
+#>2000045C          __SDA_BASE (linker command file)
+
+# .bss
+#>2000045C          ___BSS_START (linker command file)
+#>2000045C          __START_SBSS (linker command file)
+  2000045C 00000004 .sbss   __aborting	(C_4i_CF_SZ_MSL.a abort_exit_cf.o)
+  20000460 00000004 .sbss   __atexit_curr_func	(C_4i_CF_SZ_MSL.a abort_exit_cf.o)
+  20000464 00000004 .sbss   __stdio_exit	(C_4i_CF_SZ_MSL.a abort_exit_cf.o)
+  20000468 00000004 .sbss   __console_exit	(C_4i_CF_SZ_MSL.a abort_exit_cf.o)
+  2000046C 00000004 .sbss   initialized$64	(C_4i_CF_SZ_MSL.a uart_console_io)
+#>20000470          __END_SBSS (linker command file)
+#>20000470          __START_BSS (linker command file)
+  20000470 00000002 .bss    uart0ArryIndex	(main.c)
+  20000472 00000001 .bss    pack	(main.c)
+  20000473 00000001 .bss    cmd	(main.c)
+  20000474 00000190 .bss    hCoeff$50	(main.c)
+  20000604 00000322 .bss    x2$156	(main.c)
+  20000926 00000322 .bss    hCoeffXCoords$168	(main.c)
+  20000C48 0000025A .bss    y1s$189	(main.c)
+  20000EA2 00000002 .bss    i$190	(main.c)
+  20000EA4 00000002 .bss    rem$191	(main.c)
+  20000EA6 0000025A .bss    y2$206	(main.c)
+  20001100 000007D0 .bss    xhyhHcoeffCmnd$220	(main.c)
+  200018D0 00000400 .bss    xCoordRepl$252	(main.c)
+  20001CD0 00000005 .bss    xhyhCmndByteArry$286	(main.c)
+  20001CD5 00000005 .bss    adcXhyhCmndByteArry$314	(main.c)
+  20001CDA 00000A00 .bss    xhyhCmndArry$358	(main.c)
+  200026DA 00000400 .bss    adcRes$508	(main.c)
+  20002ADA 000002FA .bss    adcResBaseYCoord$523	(main.c)
+  20002DD4 000002FA .bss    lcdAdcBaseYCoord$534	(main.c)
+  200030CE 00000400 .bss    adcResYCoord$547	(main.c)
+  200034CE 00000400 .bss    adcResYCoord$575	(main.c)
+  200038D0 00000800 .bss    y$646	(main.c)
+  200040D0 0000000A .bss    rcvArry$960	(main.c)
+  200040DC 00000004 .bss    setColorHstry	(main.c)
+  200040E0 00000004 .bss    setGrphColorPtr	(main.c)
+  200040E4 00000193 .bss    uart0Arry	(main.c)
+  20004278 00000004 .bss    __global_destructor_chain	(C_4i_CF_Runtime.a cf_staticinitia)
+  2000427C 00000100 .bss    __atexit_funcs	(C_4i_CF_SZ_MSL.a abort_exit_cf.o)
+  2000437C 00000050 .bss    __files	(C_4i_CF_SZ_MSL.a ansi_files.o   )
+  200043CC 0000000C .bss    pbuf	(C_4i_CF_SZ_MSL.a printf.o       )
+#>200043D8          __END_BSS (linker command file)
+#>200043D8          ___BSS_END (linker command file)
+
+# .custom
+#>200043D8          ___HEAP_START (linker command file)
+#>200043D8          ___heap_addr (linker command file)
+#>200053D8          ___HEAP_END (linker command file)
+#>200053D8          ___SP_END (linker command file)
+#>200063D8          ___SP_INIT (linker command file)
+#>20000000          ___VECTOR_RAM (linker command file)
+#>200063D8          __SP_INIT (linker command file)
+#>00003554          _romp_at (linker command file)
+
+# .romp
+#>00003554          __S_romp (linker command file)
+
+
+# Memory map:
+  v_addr   p_addr   size     name
+  00000000 00000000 00000400 .vectors   vectorrom
+  00000400 00000400 00000018 .cfmprotect cfmprotrom
+  00000500 00000500 00000000 .code      code
+  00000500 00000500 00002FF8 .text      code
+  20000000 20000000 00000000 .vectorram vectorram
+  20000400 20000400 00000000 .userram   userram
+  20000400 000034F8 0000005C .data      userram
+  2000045C 2000045C 00003F7C .bss       userram
+  200043D8 200043D8 00000000 .custom    userram
+  200043D8 00003554 00000018 .romp      userram
+
+# Link start time: Mon Feb 23 23:29:28 2015
+# Link end time: Mon Feb 23 23:29:29 2015
