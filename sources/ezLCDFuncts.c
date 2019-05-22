@@ -903,6 +903,32 @@ void eraseHcoefGrph(int16 *hCoeffPtr, int16 *y1sPtr, uint16 *y2Ptr, uint16 *x2Pt
 	/* linToXhyhCmndPtrHst points to the complete h coeff array. */
 	drwBordAndGrids(setGrdColorPtr);
 }
+void updateRawSig(uint16 *adcResBaseYCoordPtr, uint16 *lcdAdcBaseYCoordPtr,
+				uint16 *adcXCoordPtr)
+{
+	uint16 *adcPtr;
+	uint16 *adcYCoordPtr;
+
+   /* If in raw signal mode already,
+  	   update the raw adc and show it */
+	/* capture adc samples */
+	/* raw adc */
+	adcPtr = adcArryPtr();
+	adcYCoordPtr = 	
+		bldAdcResYCoord(adcResBaseYCoordPtr, adcPtr, lcdAdcBaseYCoordPtr);	 	
+	/* set the beginning location of the adc signal */	
+	adcSetXhyhPtr = bldAdcXhyhCmndByteArry(bldXhyhCmndArry(SET_XHYH, 	
+							adcXCoordPtr, adcYCoordPtr), 1); 	
+	/* set the starting point of the adc graph */	
+	for(i=0; i<XHYHBYTES; i++)   
+	{   
+		sndRecvLcdQspiByte4(adcSetXhyhPtr++);   
+	}   
+	lcdSendCmnd(4, setGrphColorPtr);   
+	/* now send the adc results to the lcd   
+	  	and collect the responses from the lcd. */   
+	linToXhyhCmndPtr = bldXhyhCmndArry(LINE_TO_XHYH, adcXCoordPtr, adcYCoordPtr);
+}
 cmndXhyh *monitorScreen(int16 *hCoeffPtr, int16 *y1sPtr, uint16 *y2Ptr, uint16 *x2Ptr, 
 				uint16 *adcResBaseYCoordPtr, uint16 *lcdAdcBaseYCoordPtr,
 				uint16 *adcXCoordPtr)
@@ -1011,23 +1037,8 @@ cmndXhyh *monitorScreen(int16 *hCoeffPtr, int16 *y1sPtr, uint16 *y2Ptr, uint16 *
 	   	
 	      setGrphColorPtr = setColorHstry;
 			   
-			/* capture adc samples */
-			/* raw adc */
-			adcPtr = adcArryPtr();
-			adcYCoordPtr = 	
-			bldAdcResYCoord(adcResBaseYCoordPtr, adcPtr, lcdAdcBaseYCoordPtr);	 	
-			/* set the beginning location of the adc signal */	
-			adcSetXhyhPtr = bldAdcXhyhCmndByteArry(bldXhyhCmndArry(SET_XHYH, 	
-			   										adcXCoordPtr, adcYCoordPtr), 1); 	
-			/* set the starting point of the adc graph */	
-			for(i=0; i<XHYHBYTES; i++)   
-			{   
-				sndRecvLcdQspiByte4(adcSetXhyhPtr++);   
-			}   
-			lcdSendCmnd(4, setGrphColorPtr);   
-			/* now send the adc results to the lcd   
-			  	and collect the responses from the lcd. */   
-			linToXhyhCmndPtr = bldXhyhCmndArry(LINE_TO_XHYH, adcXCoordPtr, adcYCoordPtr);
+			/* Update Raw Signal */
+  	      updateRawSig(adcResBaseYCoordPtr, lcdAdcBaseYCoordPtr, adcXCoordPtr);
   	   }  /* button just pushed for signal */
   	}     /* if raw signal is pushed */
   	else if (cmd != 1)
@@ -1036,25 +1047,7 @@ cmndXhyh *monitorScreen(int16 *hCoeffPtr, int16 *y1sPtr, uint16 *y2Ptr, uint16 *
   	      if we are in that mode already. */
   	   if (already_showing_raw)
   	   {
-  	      /* If in raw signal mode already,
-  	         update the raw adc and show it */
-			/* capture adc samples */
-			/* raw adc */
-			adcPtr = adcArryPtr();
-			adcYCoordPtr = 	
-			bldAdcResYCoord(adcResBaseYCoordPtr, adcPtr, lcdAdcBaseYCoordPtr);	 	
-			/* set the beginning location of the adc signal */	
-			adcSetXhyhPtr = bldAdcXhyhCmndByteArry(bldXhyhCmndArry(SET_XHYH, 	
-			   										adcXCoordPtr, adcYCoordPtr), 1); 	
-			/* set the starting point of the adc graph */	
-			for(i=0; i<XHYHBYTES; i++)   
-			{   
-				sndRecvLcdQspiByte4(adcSetXhyhPtr++);   
-			}   
-			lcdSendCmnd(4, setGrphColorPtr);   
-			/* now send the adc results to the lcd   
-			  	and collect the responses from the lcd. */   
-			linToXhyhCmndPtr = bldXhyhCmndArry(LINE_TO_XHYH, adcXCoordPtr, adcYCoordPtr);
+  	      updateRawSig(adcResBaseYCoordPtr, lcdAdcBaseYCoordPtr, adcXCoordPtr);
   	   }
   	}  /* if raw signal is not pushed, check to see if we are in that mode already */
   	if (cmd == 5)  /* ask if cmd is filtered */
