@@ -628,7 +628,7 @@ cmndXhyh *drwhCoeffGrph(int16 *hCoeffPtr, int16 *y1sPtr, uint16 *y2Ptr,
 	lcdCoord *hCoeffYCoordPtr;
 	
 	/* We need to form the x coordinate within this
-	   routine.  We can call it */
+	   routine.  We can call it. */
 	
 	/* Forming the lcd pixel y coord from the hcoeffs. */
 	/* First we need to build the h coeff. y coords. */
@@ -885,6 +885,24 @@ void initScrn(void)
   delays(); */
   //touchProtocol(CUBUTTON);
 }
+void eraseHcoefGrph(int16 *hCoeffPtr, int16 *y1sPtr, uint16 *y2Ptr, uint16 *x2Ptr)
+{
+   /* Erase hCoeffs. border, grids and graph.
+      Then draw the raw adc border and grids */
+   uint8 *setGrdColorPtr;
+   
+   setGrdColorPtr = setColWht;
+   setGrphColorPtr = setColWht;
+   lcdSendCmnd(4, setGrphColorPtr);
+   /* erase the hcoeffs. legends. */
+   drwYHcoeffsLegnd();
+   drwXHcoeffsLegnd();
+   /* draw graph and save to graph history pointer */
+	linToXhyhCmndPtrHst = 
+	drwhCoeffGrph(hCoeffPtr, y1sPtr, y2Ptr, x2Ptr, setGrdColorPtr);
+	/* linToXhyhCmndPtrHst points to the complete h coeff array. */
+	drwBordAndGrids(setGrdColorPtr);
+}
 cmndXhyh *monitorScreen(int16 *hCoeffPtr, int16 *y1sPtr, uint16 *y2Ptr, uint16 *x2Ptr, 
 				uint16 *adcResBaseYCoordPtr, uint16 *lcdAdcBaseYCoordPtr,
 				uint16 *adcXCoordPtr)
@@ -899,7 +917,7 @@ cmndXhyh *monitorScreen(int16 *hCoeffPtr, int16 *y1sPtr, uint16 *y2Ptr, uint16 *
    /* 9/5/17 Use the new flow chart. */
    
 	vuint8 rcvData = 0;
-	vuint8 fltrGrph = 0, signals = 0, sig_and_filtr = 0;
+	vuint8 already_showing_raw = 0, fltrGrph = 0, signals = 0, sig_and_filtr = 0;
 	uint8 *setGrdColorPtr;
 	cmndXhyh *linToXhyhCmndPtr;
 	cmndXhyh *linToXhyhCmndPtrHst;
@@ -933,37 +951,25 @@ cmndXhyh *monitorScreen(int16 *hCoeffPtr, int16 *y1sPtr, uint16 *y2Ptr, uint16 *
 				sndRecvLcdQspiByte4(adcSetXhyhPtr++);   
 			}   
 			lcdSendCmnd(4, setGrphColorPtr);   
-			/* now send the adc results to the lcd   
+			/* Now send the adc results to the lcd   
 			  	and collect the responses from the lcd. */   
 			linToXhyhCmndPtr = bldXhyhCmndArry(LINE_TO_XHYH, adcXCoordPtr, adcYCoordPtr);
   	   }
   	   else if (!already_showing_raw)   /* button just pushed for signal */
   	   {
-  	      /* if not showing raw signal yet, prepare to show it.
+  	      /* If not showing raw signal yet, prepare to show it.
   	         Need to know which signal was being shown so we
   	         can erase it. */
   	      if(already_showing_hcoeffs)
   	      {
-  	         /* need to turn of the hcoeffs graph
-  	            if we were showing it */
-            /* erase hCoeffs. border, grids and graph.
-      	      Then draw the raw adc border and grids */
-            setGrdColorPtr = setColWht;
-            setGrphColorPtr = setColWht;
-            lcdSendCmnd(4, setGrphColorPtr);
-            /* erase the hcoeffs. legends. */
-            drwYHcoeffsLegnd();
-            drwXHcoeffsLegnd();
-            /* draw graph and save to graph history pointer */
-	         linToXhyhCmndPtrHst = 
-	    	   drwhCoeffGrph(hCoeffPtr, y1sPtr, y2Ptr, x2Ptr, setGrdColorPtr);
-	         /* linToXhyhCmndPtrHst points to the complete h coeff array. */
-	         drwBordAndGrids(setGrdColorPtr);
+  	         /* Need to turn off the hcoeffs graph
+  	            if we were showing it. */	         
+  	         eraseHcoefGrph(hCoeffPtr, y1sPtr, y2Ptr, x2Ptr);
   	      }
   	      else if (already_showing_filtered)
   	      {
-  	         /* need to clear the filtered signal if
-  	            we were showing it */
+  	         /* Need to clear the filtered signal if
+  	            we were showing it. */
 			   lcdSendCmnd(4, setColWht);
 			   for (index=0; index<ARRAYSIZE; index+=ADCDATAQ)
 			   {
@@ -1026,11 +1032,11 @@ cmndXhyh *monitorScreen(int16 *hCoeffPtr, int16 *y1sPtr, uint16 *y2Ptr, uint16 *
   	}     /* if raw signal is pushed */
   	else if (cmd != 1)
   	{
-  	   /* if raw signal is not pushed, check to see
-  	      if we are in that mode already */
+  	   /* If raw signal is not pushed, check to see
+  	      if we are in that mode already. */
   	   if (already_showing_raw)
   	   {
-  	      /* if in raw signal mode already,
+  	      /* If in raw signal mode already,
   	         update the raw adc and show it */
 			/* capture adc samples */
 			/* raw adc */
@@ -1081,11 +1087,9 @@ cmndXhyh *monitorScreen(int16 *hCoeffPtr, int16 *y1sPtr, uint16 *y2Ptr, uint16 *
   	      /* need to prepare the graph before displaying the 
   	         filtered signal. */
   	        
-  	   }
+  	   }   
   	         
-  	         
-  	         
-  	            if (cmd == 6) /* if command is signal and filter */
+   if (cmd == 6) /* if command is signal and filter */
   	            {
   	               if (cmd_already_sig_filtered) /* if already showing this */
   	               {
